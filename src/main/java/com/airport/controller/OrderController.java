@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/")
+//@RequestMapping("/")
 public class OrderController {
 
     @Autowired
