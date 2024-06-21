@@ -1,0 +1,126 @@
+package com.mr.Airport.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mr.Airport.entity.Ticket;
+import com.mr.Airport.entity.User;
+import com.mr.Airport.interfaces.UserFunctions;
+import com.mr.Airport.repository.UserRepository;
+
+@Service
+public class UserService implements UserFunctions {
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@Override
+	public List<Ticket> getTicketsByUserId(Long userId) throws Exception {
+		Optional<User> user = this.getUserById(userId);
+		if (user.isEmpty()) { throw new Exception(); }
+		return user.get().getTickets();
+	}
+	
+	@Override
+	public boolean ifExistUser(Long userId) {
+		return userRepository.existsById(userId);
+	}
+
+	@Override
+	public boolean login(String clientCode, String password) {
+		// Controllo se il clientCode esiste
+		Optional<User> user = userRepository.findByClientCode(clientCode);
+		if (user.isEmpty()) { return false; }
+		
+		// Controllo se esiste la password associata a quel codice cliente.
+		if (!user.get().getPassword().equals(password)) { return false; }
+		
+		// Loggo l'utente
+		userRepository.updateUserLoginById(user.get().getId());
+		return true;
+	}
+
+	@Override
+	public boolean logout(String clientCode) {
+		// Controllo se il clientCode esiste
+		Optional<User> user = userRepository.findByClientCode(clientCode);
+		if (user.isEmpty()) { return false; }
+		
+		// Sloggo l'utente
+		userRepository.updateUserLogoutById(user.get().getId());
+		return true;
+	}
+
+	@Transactional // Questo garantisce che entrambe le operazioni (save dell'utente e generazione cod. cliente) vengano eseguite come un'unica unità di lavoro. (Atomicità)
+	@Override
+	public boolean signin(String name, String surname, String email, String password) throws Exception {
+		
+		// Controllo se la mail è già esistente
+		if (userRepository.findByEmail(email).isPresent()) { return false; }
+		
+		// Creo un nuovo oggetto user
+		User newUser = new User();
+		newUser.setName(name);
+		newUser.setSurname(surname);
+		newUser.setEmail(email);
+		newUser.setPassword(password);
+		userRepository.save(newUser);
+		long newUserId = newUser.getId();
+		
+		// Genero il codice cliente
+		this.generateClientCode(newUserId);
+		
+		return true;
+	}
+
+	@Override
+	public boolean signout(String clientCode) {
+		// Controllo se il clientCode esiste
+		Optional<User> user = userRepository.findByClientCode(clientCode);
+		if (user.isEmpty()) { return false; }
+		
+		userRepository.delete(user.get());
+		return true;
+	}
+
+	@Override
+	public Optional<User> getUserById(Long userId) {
+		return userRepository.findById(userId);
+	}
+
+	@Override
+	public Optional<User> getUserByClientCode(String clientCode) {
+		return userRepository.findByClientCode(clientCode);
+	}
+	
+	/* Method Name: generateClientCode
+	 * Method Arguments: User user
+	 * Method Return: boolean or Exception
+	 * Method Errors: Exception
+	 * 
+	 * Questo metodo genera un codice cliente, utilizzando l'id dell'utente.
+	 * Questo metodo va utilizzato dopo aver già inserito l'utente nel database,
+	 * altrimenti l'id non esisterebbe.
+	 * Il formato del codice cliente è formato dalla lettera C seguita da
+	 * tanti 0 + id finale per un totale di 9 cifre. */
+	@Override
+	public boolean generateClientCode(Long userId) throws Exception {
+		// FORMAT:  C + %000 + id   ->   C000000001
+		
+//		long userId = user.getId();
+		if (!this.ifExistUser(userId)) {
+			throw new Exception();
+//			return false;
+		}
+		
+		String clientCode = String.format("C%09d", userId);
+		userRepository.updateClientCodeById(clientCode, userId);
+		return true;
+	}
+
+}
