@@ -1,0 +1,8 @@
+com/airport/AirportApplication.class
+com/airport/repository/ClientRepository.class
+com/airport/model/Flight.class
+com/airport/model/Prenotation.class
+com/airport/model/Ticket.class
+com/airport/model/Client.class
+com/airport/service/ClientService.class
+com/airport/model/enums/TypePayment.class

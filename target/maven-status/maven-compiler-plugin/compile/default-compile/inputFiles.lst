@@ -1,0 +1,8 @@
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/AirportApplication.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/model/Client.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/model/Flight.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/model/Prenotation.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/model/Ticket.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/model/enums/TypePayment.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/repository/ClientRepository.java
+/Users/SaraObia/IdeaProjects/Airport/src/main/java/com/airport/service/ClientService.java
