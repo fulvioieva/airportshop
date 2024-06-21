@@ -1,0 +1,14 @@
+package come.example.demo.enums;
+
+public enum StatusLogging {
+		LOGIN_SUCCESFULLY
+		,LOGIN_OFF_SUCCESFULLY
+		, ALREADY_LOGGED_ON
+		, ALREADY_LOGGED_OF
+		, ALREADY_SIGN_OFF
+		, WRONG_PASSWORD
+		, WRONG_MAIL
+		, WRONG_ID_CLIENT
+		, WRONG_ROLE
+
+}

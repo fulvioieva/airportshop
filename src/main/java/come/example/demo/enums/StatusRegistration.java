@@ -1,0 +1,12 @@
+package come.example.demo.enums;
+
+public enum StatusRegistration {
+	SIGNED_UP_SUCCESFULLY
+	, SIGNED_OFF_SUCCESFULLY
+	, SIGNED_OFF_UNSUCCESFULLY
+	, ALREADY_SIGNED_UP
+	, WRONG_MAIL
+	, WRONG_PASSWORD
+	, MAIL_ALREADY_EXISTS
+
+}
