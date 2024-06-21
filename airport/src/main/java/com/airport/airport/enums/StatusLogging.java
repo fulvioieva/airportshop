@@ -1,0 +1,11 @@
+package com.airport.airport.enums;
+
+public enum StatusLogging {
+	LOGIN_SUCCESFULLY, 
+	LOGOFF_SUCCESFULLY,
+	ALREADY_LOGGED_ON, 
+	ALREADY_LOGGED_OFF, 
+	WRONG_PASSWORD, 
+	WRONG_MAIL, 
+	WRONG_ID_CLIENT
+}
