@@ -36,6 +36,7 @@ public class TicketService implements TicketFunctions {
 	public boolean buyTicket(long userId, long flightId, int qta, PaymentType paymentType) throws Exception {
 		// Controllo se userId e flightId esistono, successivamente controllo disponibilità posti
 		if (!userRepository.existsById(userId)) { return false; }
+		// TODO Controlle se è loggato
 		if (!flightRepository.existsById(flightId)) { return false; }
 		if (!flightService.checkPlacesAvailable(flightId, qta)) { return false; }
 		
