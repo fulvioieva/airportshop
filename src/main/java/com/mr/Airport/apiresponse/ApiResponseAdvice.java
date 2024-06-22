@@ -14,7 +14,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 
-@ControllerAdvice
+// @ControllerAdvice  // Questa annotazione crea problemi con Swagger perchè intercetta le chiamate API
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
