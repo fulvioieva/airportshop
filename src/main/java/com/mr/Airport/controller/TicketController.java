@@ -35,6 +35,7 @@ public class TicketController {
 		try {
 			purchaseStatus = ticketService.buyTicket(userId, flightId, qta, paymentType);
 		} catch (Exception e) {
+			// TODO -> Da controllare perchè non viene richiamato quando inserisco un volo inesistente
 			return new ResponseEntity<>(new ApiResponse<>(false, "Flight does not exist", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		}
 				

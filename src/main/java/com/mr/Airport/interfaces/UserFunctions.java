@@ -24,6 +24,7 @@ public interface UserFunctions {
 	
 	List<Ticket> getTicketsByUserId(Long userId) throws Exception;
 	boolean ifExistUser(Long userId);
+	boolean ifUserIsLogged(Long userId);
 	boolean login(String clientCode, String password);
 	boolean logout(String clientCode);
 	boolean signin(String name, String surname, String email, String password) throws Exception;

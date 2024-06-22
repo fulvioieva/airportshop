@@ -30,6 +30,14 @@ public class UserService implements UserFunctions {
 	public boolean ifExistUser(Long userId) {
 		return userRepository.existsById(userId);
 	}
+	
+	@Override
+	public boolean ifUserIsLogged(Long userId) {
+		if (!ifExistUser(userId)) { return false; }
+		int userStatus = userRepository.findById(userId).get().getLogged();
+		if (userStatus == 0) { return false; }
+		return true;
+	}
 
 	@Override
 	public boolean login(String clientCode, String password) {
