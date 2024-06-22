@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/airport/api/v1")
 public class FlightController {
 
     @Autowired

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/airport/api/v1")
 public class ClientController {
 
     @Autowired

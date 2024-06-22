@@ -19,13 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .useRegisteredExtensionsOnly(true);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/4.18.2/")
-                .resourceChain(false);
-    }
-
 
 
 }

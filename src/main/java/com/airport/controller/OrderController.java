@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/airport/api/v1")
 public class OrderController {
 
     @Autowired
