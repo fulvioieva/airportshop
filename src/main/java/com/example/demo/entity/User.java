@@ -2,16 +2,20 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.example.demo.enums.Status;
 import com.example.demo.enums.TypePayment;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,41 +28,41 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="id_user")
-	private int idUser;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
-	@Column(name="name")
+	
 	private String name;
 	
-	@Column(name="surname")
+	
 	private String surname;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="type_payment")
 	private TypePayment typePayment;
 	
-	@Column(name="password")
+	
 	private String password;
 	
-	@Column(name="address")
+	
 	private String address;
 	
-	@Column(name = "mail", unique = true)
+	
 	private String mail;
 	
-	@Column(name="date_birth")
-	private Date date_birth;
+	
+	private Date dateBirth;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="status")
 	private Status status;
+	
+	@OneToMany(mappedBy = "userEntity")
+    private Set<Cart> carts = new HashSet<>();
 
-	public int getIdUser() {
-		return idUser;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -109,12 +113,12 @@ public class User implements Serializable {
 		this.mail = mail;
 	}
 
-	public Date getDate_birth() {
-		return date_birth;
+	public Date getDateBirth() {
+		return dateBirth;
 	}
 
-	public void setDate_birth(Date date_birth) {
-		this.date_birth = date_birth;
+	public void setDateBirth(Date dateBirth) {
+		this.dateBirth = dateBirth;
 	}
 
 	public Status getStatus() {
@@ -127,7 +131,7 @@ public class User implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, date_birth, idUser, mail, name, password, status, surname, typePayment);
+		return Objects.hash(address, dateBirth, id, mail, name, password, status, surname, typePayment);
 	}
 
 	@Override
@@ -139,32 +143,35 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(address, other.address) && Objects.equals(date_birth, other.date_birth)
-				&& idUser == other.idUser && Objects.equals(mail, other.mail) && Objects.equals(name, other.name)
+		return Objects.equals(address, other.address) && Objects.equals(dateBirth, other.dateBirth) && id == other.id
+				&& Objects.equals(mail, other.mail) && Objects.equals(name, other.name)
 				&& Objects.equals(password, other.password) && status == other.status
 				&& Objects.equals(surname, other.surname) && typePayment == other.typePayment;
 	}
 
 	@Override
 	public String toString() {
-		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", typePayment=" + typePayment
-				+ ", password=" + password + ", address=" + address + ", mail=" + mail + ", date_birth=" + date_birth
-				+ ", status=" + status + "]";
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", typePayment=" + typePayment
+				+ ", password=" + password + ", address=" + address + ", mail=" + mail + ", dateBirth=" + dateBirth
+				+ ", status=" + status + ", carts=" + carts + "]";
 	}
 
-	public User(int idUser, String name, String surname, TypePayment typePayment, String password, String address,
-			String mail, Date date_birth, Status status) {
+	public User(int id, String name, String surname, TypePayment typePayment, String password, String address,
+			String mail, Date dateBirth, Status status) {
 		super();
-		this.idUser = idUser;
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.typePayment = typePayment;
 		this.password = password;
 		this.address = address;
 		this.mail = mail;
-		this.date_birth = date_birth;
+		this.dateBirth = dateBirth;
 		this.status = status;
-	}
+	};
 
-		
+	public User() {
+		super();
+	};
+	
 }
