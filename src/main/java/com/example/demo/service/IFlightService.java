@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +11,4 @@ public interface IFlightService {
 	List<Flight> getAllFlight();
 	Optional<Flight> getFlight(int idFlight);
 	boolean deleteFlight(int idFlight);
-	List<Flight> getFlightsOrigin(String city);
-	List<Flight> getFlightBetween(Date date, Date date2);
-	List<Flight> getFlightsDestination(String city);
 }
