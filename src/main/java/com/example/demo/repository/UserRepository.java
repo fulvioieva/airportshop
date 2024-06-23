@@ -10,6 +10,6 @@ import com.example.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-//	List<User> findByDateBirthBetween(Date date_birth, Date date_birth2);
-//	List<User> findByAddressLike(String addressLike);
+	List<User> findByDateBirthBetween(Date date_birth, Date date_birth2);
+	List<User> findByAddressLike(String addressLike);
 }
