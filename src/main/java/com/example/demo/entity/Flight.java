@@ -3,16 +3,23 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="flight")
-public class Flight implements Serializable {
+public class Flight implements Serializable  {
 
 	/**
 	 * 
@@ -20,76 +27,38 @@ public class Flight implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column
-	private int id_flight;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
-	@Column
+	
 	private String name;
 	
-	@Column
-	private String origin;
 	
-	@Column
-	private String destination;
 	
-	@Column
 	private LocalTime time;
 	
-	@Column
+	
 	private Date date;
 	
-	@Column
+	
 	private int price;
 	
-	@Column 
-	private int places_available;
+	
+	private int placesAvailable;
+	
+	@OneToMany(mappedBy = "flightEntity")
+    private Set<Cart> carts = new HashSet<>();;
 
-	public Flight(int id_flight, String name, String origin, String destination, LocalTime time, Date date, int price,
-			int places_available) {
-		super();
-		this.id_flight = id_flight;
-		this.name = name;
-		this.origin = origin;
-		this.destination = destination;
-		this.time = time;
-		this.date = date;
-		this.price = price;
-		this.places_available = places_available;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tratte_id")
+    private Tratte tratteEntity;
+
+	public int getId() {
+		return id;
 	}
 
-	@Override
-	public String toString() {
-		return "Flight [id_flight=" + id_flight + ", name=" + name + ", origin=" + origin + ", destination="
-				+ destination + ", time=" + time + ", date=" + date + ", price=" + price + ", places_available="
-				+ places_available + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(date, destination, id_flight, name, origin, places_available, price, time);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Flight other = (Flight) obj;
-		return Objects.equals(date, other.date) && Objects.equals(destination, other.destination)
-				&& id_flight == other.id_flight && Objects.equals(name, other.name)
-				&& Objects.equals(origin, other.origin) && places_available == other.places_available
-				&& price == other.price && Objects.equals(time, other.time);
-	}
-
-	public int getId_flight() {
-		return id_flight;
-	}
-
-	public void setId_flight(int id_flight) {
-		this.id_flight = id_flight;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -98,22 +67,6 @@ public class Flight implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(String origin) {
-		this.origin = origin;
-	}
-
-	public String getDestination() {
-		return destination;
-	}
-
-	public void setDestination(String destination) {
-		this.destination = destination;
 	}
 
 	public LocalTime getTime() {
@@ -140,11 +93,57 @@ public class Flight implements Serializable {
 		this.price = price;
 	}
 
-	public int getPlaces_available() {
-		return places_available;
+	public int getPlacesAvailable() {
+		return placesAvailable;
 	}
 
-	public void setPlaces_available(int places_available) {
-		this.places_available = places_available;
+	public void setPlacesAvailable(int placesAvailable) {
+		this.placesAvailable = placesAvailable;
 	}
+
+	public Tratte getTratteEntity() {
+		return tratteEntity;
+	}
+
+	public void setTratteEntity(Tratte tratteEntity) {
+		this.tratteEntity = tratteEntity;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date, id, name, placesAvailable, price, time, tratteEntity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Flight other = (Flight) obj;
+		return Objects.equals(date, other.date) && id == other.id && Objects.equals(name, other.name)
+				&& placesAvailable == other.placesAvailable && price == other.price && Objects.equals(time, other.time)
+				&& Objects.equals(tratteEntity, other.tratteEntity);
+	}
+
+	@Override
+	public String toString() {
+		return "Flight [id=" + id + ", name=" + name + ", time=" + time + ", date=" + date + ", price=" + price
+				+ ", placesAvailable=" + placesAvailable + ", carts=" + carts + ", tratteEntity=" + tratteEntity + "]";
+	}
+
+	public Flight(int id, String name, LocalTime time, Date date, int price, int placesAvailable, Tratte tratteEntity) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.time = time;
+		this.date = date;
+		this.price = price;
+		this.placesAvailable = placesAvailable;
+		this.tratteEntity = tratteEntity;
+	}
+
+	
 }
