@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ public class UserService implements IUserService {
 	UserRepository userRepository;
 	
 	String[] valoriNonAmmessi = {"1","2","3","4","5","6","7","8","9",".","-","_"};
-	
+
 	@Override
 	public boolean addUser(User user) {
 		List<String> listMail = new ArrayList<>();
@@ -46,12 +45,10 @@ public class UserService implements IUserService {
 		userRepository.save(user);
 		return true;
 	}
-	
-	
 
 	@Override
 	public boolean updateUser(User user) {
-		if (userRepository.findById(user.getId_user()).isEmpty()) {
+		if (userRepository.findById(user.getId()).isEmpty()) {
 			return false;
 		}
 		for (String client2 : user.getName().trim().split("")) {
@@ -70,7 +67,6 @@ public class UserService implements IUserService {
 		userRepository.save(user);
 		return true;
 	}
-	
 
 	@Override
 	public List<User> getAllUser() {
@@ -94,25 +90,6 @@ public class UserService implements IUserService {
 		userRepository.deleteById(idUser);
 		return true;
 	}
-
-//	@Override
-//	public List<User> getUserCityLike(String city) {
-//		List<User> listUsers= new ArrayList<User>();
-//		listUsers = userRepository.findByAddressLike(city);
-//		if (listUsers.isEmpty()) {
-//			throw new NullPointerException();
-//		}
-//		return listUsers;
-//	}
-//
-//	@Override
-//	public List<User> getUserBetween(Date date_birth, Date date_birth2) {
-//		List<User> listUsers= new ArrayList<User>();
-//		listUsers = userRepository.findByDateBirthBetween(date_birth,date_birth2);
-//		if (listUsers.isEmpty()) {
-//			throw new NullPointerException();
-//		}
-//		return listUsers;
-//	}
-
+	
+	
 }
