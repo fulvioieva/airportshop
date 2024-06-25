@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
         contact = @Contact(
                 name = "Sara"
         ),
-        description = "Your description here",
-        title = "Your Title here",
+        description = "API Rest that offers services for an online airline ticket office",
+        title = "Airport Shop api",
         version = "1.0"
     ),
         servers = {

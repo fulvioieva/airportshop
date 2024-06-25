@@ -89,23 +89,25 @@ public class OrderController {
 
 
 
-    @GetMapping(value = "orders/{idClient}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Map<String, Object>> getOrders(@PathVariable("idClient") String idCLient,
+    @GetMapping("orders/{idClient}")
+    public ResponseEntity<List<OrderDTO>> getOrders(@PathVariable("idClient") String idCLient,
                                                       @RequestHeader("Authorization") String token) throws FlightNotFoundException, NoOrderForClientException, ClientNotFoundException {
-        //TODO: modify
-        Claims claims = jwtUtility.validateToken(token.replace("Bearer ", ""));
-        String clientId = claims.getSubject();
 
-        List<Order> orders = orderFunctions.viewClientOrders(idCLient);
+        try {
+            Claims claims = jwtUtility.validateToken(token.replace("Bearer ", ""));
+            String clientId = claims.getSubject();
 
-        List<OrderDTO> ordersDTO = orders.stream()
-                                    .map(order -> convertToDTO(order, OrderDTO.class))
-                                    .collect(Collectors.toList());
+            List<Order> orders = orderFunctions.viewClientOrders(idCLient);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("orders:", ordersDTO);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            List<OrderDTO> ordersDTO = orders.stream()
+                                        .map(order -> convertToDTO(order, OrderDTO.class))
+                                        .collect(Collectors.toList());
+            return new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+        } catch (JwtException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private <Entity, D> D convertToDTO(Entity entity, Class<D> dtoClass) {

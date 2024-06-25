@@ -19,6 +19,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .useRegisteredExtensionsOnly(true);
     }
 
-
-
 }
