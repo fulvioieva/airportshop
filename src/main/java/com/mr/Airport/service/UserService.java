@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,19 +19,19 @@ public class UserService implements UserFunctions {
 	UserRepository userRepository;
 	
 	@Override
-	public List<Ticket> getTicketsByUserId(Long userId) throws Exception {
-		Optional<User> user = this.getUserById(userId);
-		if (user.isEmpty()) { throw new Exception(); }
-		return user.get().getTickets();
+	public List<Ticket> getTicketsByUserId(long userId) throws Exception {
+		if (!userRepository.existsById(userId)) { throw new Exception(); }
+		User user = userRepository.findById(userId).get();
+		return user.getTickets();
 	}
 	
 	@Override
-	public boolean ifExistUser(Long userId) {
+	public boolean ifExistUser(long userId) {
 		return userRepository.existsById(userId);
 	}
 	
 	@Override
-	public boolean ifUserIsLogged(Long userId) {
+	public boolean ifUserIsLogged(long userId) {
 		if (!ifExistUser(userId)) { return false; }
 		int userStatus = userRepository.findById(userId).get().getLogged();
 		if (userStatus == 0) { return false; }
@@ -54,10 +53,13 @@ public class UserService implements UserFunctions {
 	}
 
 	@Override
-	public boolean logout(String clientCode) {
+	public boolean logout(String clientCode) throws Exception {
 		// Controllo se il clientCode esiste
 		Optional<User> user = userRepository.findByClientCode(clientCode);
-		if (user.isEmpty()) { return false; }
+		if (user.isEmpty()) { throw new Exception(); }
+		
+		// Se è già sloggato torno false
+		if (user.get().getLogged() == 0) { return false; }
 		
 		// Sloggo l'utente
 		userRepository.updateUserLogoutById(user.get().getId());
@@ -82,22 +84,21 @@ public class UserService implements UserFunctions {
 		
 		// Genero il codice cliente
 		this.generateClientCode(newUserId);
-		
 		return true;
 	}
 
 	@Override
-	public boolean signout(String clientCode) {
+	public boolean signout(String clientCode) throws Exception {
 		// Controllo se il clientCode esiste
 		Optional<User> user = userRepository.findByClientCode(clientCode);
-		if (user.isEmpty()) { return false; }
+		if (user.isEmpty()) { throw new Exception(); }
 		
 		userRepository.delete(user.get());
 		return true;
 	}
 
 	@Override
-	public Optional<User> getUserById(Long userId) {
+	public Optional<User> getUserById(long userId) {
 		return userRepository.findById(userId);
 	}
 
@@ -117,15 +118,10 @@ public class UserService implements UserFunctions {
 	 * Il formato del codice cliente è formato dalla lettera C seguita da
 	 * tanti 0 + id finale per un totale di 9 cifre. */
 	@Override
-	public boolean generateClientCode(Long userId) throws Exception {
+	public boolean generateClientCode(long userId) throws Exception {
 		// FORMAT:  C + %000 + id   ->   C000000001
-		
-//		long userId = user.getId();
-		if (!this.ifExistUser(userId)) {
-			throw new Exception();
-//			return false;
-		}
-		
+	
+		if (!this.ifExistUser(userId)) { throw new Exception(); }
 		String clientCode = String.format("C%09d", userId);
 		userRepository.updateClientCodeById(clientCode, userId);
 		return true;

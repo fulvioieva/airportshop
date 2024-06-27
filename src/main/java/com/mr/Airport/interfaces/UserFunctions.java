@@ -22,14 +22,14 @@ public interface UserFunctions {
 	 * generateClientCode -
 	 * existUser - */
 	
-	List<Ticket> getTicketsByUserId(Long userId) throws Exception;
-	boolean ifExistUser(Long userId);
-	boolean ifUserIsLogged(Long userId);
+	List<Ticket> getTicketsByUserId(long userId) throws Exception;
+	boolean ifExistUser(long userId);
+	boolean ifUserIsLogged(long userId);
 	boolean login(String clientCode, String password);
-	boolean logout(String clientCode);
+	boolean logout(String clientCode) throws Exception;
 	boolean signin(String name, String surname, String email, String password) throws Exception;
-	boolean signout(String clientCode);
-	Optional<User> getUserById(Long userId);
+	boolean signout(String clientCode) throws Exception;
+	Optional<User> getUserById(long userId);
 	Optional<User> getUserByClientCode(String clientCode);
-	boolean generateClientCode(Long userId) throws Exception;
+	boolean generateClientCode(long userId) throws Exception;
 }

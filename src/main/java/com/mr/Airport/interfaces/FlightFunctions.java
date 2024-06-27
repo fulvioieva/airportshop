@@ -23,7 +23,7 @@ public interface FlightFunctions {
 	List<Flight> getAllFlights();
 	Optional<Flight> getFlightById(long flightId);
 	List<Flight> getFlightsByDepartureArrivalDatesTimes(String departureAirport, String arrivalAirport, LocalDate departureDate, LocalTime departureTime);
-	boolean checkPlacesAvailable(long flightId, int qta);
+	boolean checkPlacesAvailable(long flightId, int qta) throws Exception;
 	boolean addFlightPlaces(long flightId, int places);
-	boolean removeFlightPlaces(long flightId, int places);
+	boolean removeFlightPlaces(long flightId, int places) throws Exception;
 }

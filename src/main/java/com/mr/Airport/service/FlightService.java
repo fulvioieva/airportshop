@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mr.Airport.entity.Flight;
-import com.mr.Airport.entity.Ticket;
 import com.mr.Airport.interfaces.FlightFunctions;
 import com.mr.Airport.repository.FlightRepository;
 
@@ -37,7 +36,8 @@ public class FlightService implements FlightFunctions {
 
 	// Questo metodo ritorna true se la qta richiesta è disponibile
 	@Override
-	public boolean checkPlacesAvailable(long flightId, int qta) {
+	public boolean checkPlacesAvailable(long flightId, int qta) throws Exception {
+		if (qta < 1) { throw new Exception(); }
 		if (!flightRepository.existsById(flightId)) { return false; }
 		int placesAvailable = this.getFlightById(flightId).get().getPlacesAvailable();
 		if (qta > placesAvailable) { return false; }
@@ -58,7 +58,7 @@ public class FlightService implements FlightFunctions {
 	}
 
 	@Override
-	public boolean removeFlightPlaces(long flightId, int places) {
+	public boolean removeFlightPlaces(long flightId, int places) throws Exception {
 		if (!flightRepository.existsById(flightId)) { return false; }
 		
 		// Se i posti da rimuovere non sono disponibili return false

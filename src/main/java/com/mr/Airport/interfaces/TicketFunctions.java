@@ -16,7 +16,7 @@ public interface TicketFunctions {
 	
 	boolean buyTicket(long userId, long flightId, int qta, PaymentType paymentType) throws Exception;
 	List<Ticket> getAllTickets();
-	List<Ticket> getAllUserTicketsById(long userId) throws Exception;
+//	List<Ticket> getAllUserTicketsById(long userId) throws Exception;
 	boolean addTicketQta(long ticketId, int qta, long userId) throws Exception;
 	boolean removeTicketQta(long ticketId, int qta, long userId) throws Exception;
 }

@@ -26,7 +26,6 @@ public class FlightController {
 	@Autowired
 	private FlightFunctions flightService;
 	
-	// TODO Guarda come hai fatto queste response entity mettile anche negli altri controller
 	
 	// READ All Flights
 	@GetMapping(value= "flights", produces= { MediaType.APPLICATION_JSON_VALUE })
@@ -34,10 +33,11 @@ public class FlightController {
 		
 		List<Flight> allFlights = flightService.getAllFlights();
 		if (allFlights.isEmpty()) {
-			return new ResponseEntity<>(new ApiResponse<>(allFlights, "No Content", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ApiResponse<>(allFlights, "No Content", HttpStatus.OK.value()), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(new ApiResponse<>(allFlights, "Success", HttpStatus.OK.value()), HttpStatus.OK);
 	}
+	
 	
 	
 	// READ Flight by Id
@@ -52,10 +52,13 @@ public class FlightController {
 		
 	}
 	
+	
+	
 	// TODO Rendi i parametri opzionali, in pratica in base a quelli che ti arrivano, fai una if e richiami i metodi precisi,
 	// ad esempio potrebbero essere questi: ricerca tramite aeroporto di partenza, solo di arrivo, partenza e arrivo e fanno vedere
 	// tutti quelli che partono da quel giorno in poi, quei dati con solo il giorno mostra tutti i voli disponibili per quelle dest.
 	// in quel giorno, solo data mostri tutti i voli disponibili in quel giorno ecc...
+	// TODO Inserisci anche la paginazione per non avere troppi voli quando si seleziona solo 1 informazione
 	// READ Flight by Departure, Arrival, Dep date, Dep time
 	@GetMapping(value= "flights/filter", produces= { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ApiResponse<List<Flight>>> getFlightsByDepartureArrivalDatesTimes(@RequestParam String departureAirport,
@@ -65,18 +68,24 @@ public class FlightController {
 		
 		List<Flight> filteredFlights = flightService.getFlightsByDepartureArrivalDatesTimes(departureAirport, arrivalAirport, departureDate, departureTime);
 		if (filteredFlights.isEmpty()) {
-			return new ResponseEntity<>(new ApiResponse<>(filteredFlights, "No Content", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND); // Se metti NO_CONTENT, in automatico non ritorna l'oggetto response
+			return new ResponseEntity<>(new ApiResponse<>(filteredFlights, "No flights found that match these filters", HttpStatus.OK.value()), HttpStatus.OK); // Se metti NO_CONTENT, in automatico non ritorna l'oggetto response
 		}
 		return new ResponseEntity<>(new ApiResponse<>(filteredFlights, "Success", HttpStatus.OK.value()), HttpStatus.OK);
 	}
 	
 	
-	// READ Flight by Id
+	
+	// CHECK Flight Places Availability
 	@GetMapping(value= "flights/{flightId}/checkplaces/{qta}", produces= { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ApiResponse<Boolean>> checkPlacesAvailable(@PathVariable("flightId") long flightId,
 																	 @PathVariable("qta") int qta) {
 		
-		boolean available = flightService.checkPlacesAvailable(flightId, qta);
+		boolean available = false;
+		try {
+			available = flightService.checkPlacesAvailable(flightId, qta);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ApiResponse<>(available, "Invalid quantity", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+		}
 		if (!available) {
 			return new ResponseEntity<>(new ApiResponse<>(available, "Selected Quantity Not Available", HttpStatus.OK.value()), HttpStatus.OK);
 		}
@@ -84,5 +93,4 @@ public class FlightController {
 		
 	}
 	
-
 }

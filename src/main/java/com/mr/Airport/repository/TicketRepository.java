@@ -1,6 +1,7 @@
 package com.mr.Airport.repository;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,6 +14,9 @@ import com.mr.Airport.entity.Ticket;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
+	
+	// Prendo il biglietto che ha come corrispondenza il ticketId e userId
+	Optional<Ticket> findByIdAndUserId(long ticketId, long userId);
 
 	// Query JPQL per aggiornare il numero di biglietti prenotati.
 	@Modifying
