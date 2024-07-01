@@ -1,11 +1,13 @@
 package com.airport_database.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.airport_database.entity.Ticket;
 import com.airport_database.enums.TypePayment;
 import com.airport_database.services.TicketServices;
+@CrossOrigin(origins = {"http://localhost:5173/"})
 
 @RestController
 @RequestMapping(path = "/AirportServices/tickets")
@@ -35,13 +38,16 @@ public class TicketController {
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
   
-    //rotta per un biglietto specifico tramite id
+ // rotta per un biglietto specifico tramite id
     @GetMapping(value = "/{idTicket}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Ticket> getTicketById(@PathVariable int idTicket) {
+    public ResponseEntity<Ticket> getTicketByIdAndUser(@PathVariable int idTicket, @RequestParam String idUser) {
         if (!ticketServices.existsById(idTicket)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Ticket ticket = ticketServices.getTicketById(idTicket);
+        if (!ticket.getUserId().equals(idUser)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(ticket, HttpStatus.OK);
     }
 
@@ -65,6 +71,12 @@ public class TicketController {
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 
+    @GetMapping("/existing/{idFlight}/{idUser}")
+    public int getExistingTicket(@PathVariable String idFlight, @PathVariable String idUser) {
+        Optional<Ticket> existingTicket = Optional.ofNullable(ticketServices.getExistingTicketId(idFlight, idUser));
+        return existingTicket.get().getIdTicket();
+    }
+    
     //rotta per aggiungere un nuovo biglietto al DB
     @PostMapping(value="/newTicket",produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Ticket> addTicket(@RequestParam("idFlight") String idFlight,

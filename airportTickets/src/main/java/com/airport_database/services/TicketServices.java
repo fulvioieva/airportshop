@@ -2,6 +2,8 @@ package com.airport_database.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.airport_database.entity.Flight;
@@ -51,7 +53,9 @@ public class TicketServices implements ITicketServices {
 	public Ticket addTicket(String idFlight, String idUser, int qty, TypePayment pay) throws Throwable {
 
  		if (fRepo.existsById(idFlight)&&uRepo.existsById(idUser)) {
-			
+ 	        if (tRepo.existsByFlightIdAndUserId(idFlight, idUser)) {
+ 	            throw new Exception("Hai già acquistato un biglietto per questo volo.");
+ 	        }
 			//verifico la presenza di posti liberi
 			Flight flight=fRepo.findById(idFlight).get();
 
@@ -66,6 +70,7 @@ public class TicketServices implements ITicketServices {
 			BigDecimal sPrice=fRepo.findById(idFlight).get().getPrice();
 			ticket.setTotalPrice(sPrice.multiply(BigDecimal.valueOf(qty)));
 			ticket.setPaymentType(pay);
+			ticket.setTicketsQty(qty);
 			
 			//modifico la quantità odi biglietti totali del volo
 			flight.setAvailablePlaces(flight.getAvailablePlaces()-qty);
@@ -103,6 +108,10 @@ public class TicketServices implements ITicketServices {
 			ticket.setTicketsQty(newQty);
 			ticket.setTotalPrice(sPrice.multiply(BigDecimal.valueOf(newQty)));
 			fRepo.save(refFlight);
+			if (newQty==0) {
+		        tRepo.delete(ticket);
+		        return true;
+			}else
 			tRepo.save(ticket);
 			return true;
 		}
@@ -121,4 +130,9 @@ public class TicketServices implements ITicketServices {
 		return true;
 	}
 
+	@Override
+	public Ticket getExistingTicketId(String idFlight, String idUser) {
+	    Optional<Ticket> existingTicket = tRepo.findByFlightIdAndUserId(idFlight, idUser);
+	    return existingTicket.get(); // Restituisce -1 se il biglietto non esiste
+	}
 }

@@ -3,6 +3,7 @@ package com.airport_database.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,6 +29,7 @@ public class User implements Serializable{
 	
 	@Column(name = "Password")
 	private String password;
+
 
 	public String getIdUser() {
 		return idUser;
@@ -80,5 +82,6 @@ public class User implements Serializable{
 		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", password="
 				+ password + "]";
 	}
-	
+
+    
 }

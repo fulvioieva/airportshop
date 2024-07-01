@@ -21,4 +21,5 @@ public interface ITicketServices {
 	
 	boolean updateTicketQuantity(int idTicket, int newQty) throws Exception;
 		
+	public Ticket getExistingTicketId(String idFlight, String idUser);
 }
