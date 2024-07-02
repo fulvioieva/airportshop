@@ -1,0 +1,42 @@
+package com.e_commerceWebApp.services;
+
+import com.e_commerceWebApp.entity.Article;
+import com.e_commerceWebApp.repository.ArticleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class ArticleService implements IArticleService{
+
+    @Autowired
+    private ArticleRepository articleRepo;
+
+    @Override
+    public List<Article> getAllArticles() {
+
+        return articleRepo.findAll();
+    }
+
+    @Override
+    public boolean existsById(String articleId) {
+        return articleRepo.existsById(articleId);
+    }
+
+    @Override
+    public int updateArticle(Article article) {
+        if (articleRepo.existsById(article.getIdArticle())){
+            articleRepo.save(article);
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public Article getArticleById(String articleId) {
+        return articleRepo.findById(articleId).orElse(new Article());
+    }
+
+}

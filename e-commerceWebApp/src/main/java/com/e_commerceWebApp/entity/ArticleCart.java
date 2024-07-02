@@ -2,29 +2,27 @@ package com.e_commerceWebApp.entity;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "articleCart"/*, schema = "ecommerce_on_db"*/)
 public class ArticleCart {
 
-    @Id 
-    @ManyToOne
-    @JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)
-    private Article article;
+	@EmbeddedId
+	private ArticleCartId id;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
-    private Cart cart;
+	@MapsId("articleId")
+	@ManyToOne
+	@JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)
+	private Article article;
 
-    @Column(name = "qty_ordered", nullable = false)
-    private Integer qtyOrdered;
+	@MapsId("cartId")
+	@ManyToOne
+	@JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
+	private Cart cart;
+
+	@Column(name = "qty_ordered", nullable = false)
+	private Integer qtyOrdered;
 
 	public Article getArticle() {
 		return article;
