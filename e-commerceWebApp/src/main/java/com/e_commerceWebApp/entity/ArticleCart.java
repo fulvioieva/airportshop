@@ -24,7 +24,6 @@ public class ArticleCart {
 	@Column(name = "qty_ordered", nullable = false)
 	private Integer qtyOrdered;
 
-
 	public Integer getQtyOrdered() {
 		return qtyOrdered;
 	}
@@ -68,5 +67,15 @@ public class ArticleCart {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, article, cart, qtyOrdered);
+	}
+
+	@Override
+	public String toString() {
+		return "ArticleCart{" +
+				"id=" + id +
+				", article=" + article +
+				", cart=" + cart +
+				", qtyOrdered=" + qtyOrdered +
+				'}';
 	}
 }

@@ -16,13 +16,13 @@ public class ArticleController {
 
     // Inietta il servizio degli articoli.
     @Autowired
-    private ArticleService ArticleServices;
+    private ArticleService articleServices;
 
     // Questo metodo restituisce tutti gli articoli.
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<List<Article>> getAllArticles() {
         // Ottieni tutti gli articoli dal servizio.
-        List<Article> articleList = ArticleServices.getAllArticles();
+        List<Article> articleList = articleServices.getAllArticles();
         // Se la lista è vuota, restituisci uno stato HTTP 404 (Not Found).
         if (articleList.isEmpty()){
             return new ResponseEntity<List<Article>>(HttpStatus.NOT_FOUND);
@@ -35,9 +35,10 @@ public class ArticleController {
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Article> getArticleById(@PathVariable("id") String id) {
         // Ottieni l'articolo dal servizio.
-        Article obj = ArticleServices.getArticleById(id);
+        Article obj = articleServices.getArticleById(id);
+        System.out.println(obj);
         // Se l'articolo esiste, restituisci l'articolo con uno stato HTTP 200 (OK).
-        if (ArticleServices.existsById(id)) {
+        if (articleServices.existsById(id)) {
             return new ResponseEntity<Article>(obj, HttpStatus.OK);
         }
         // Altrimenti, restituisci uno stato HTTP 404 (Not Found).
@@ -48,11 +49,12 @@ public class ArticleController {
     @PutMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Article> updateArticle(@PathVariable String id, @RequestBody Article entity) {
         // Se l'articolo non esiste, restituisci uno stato HTTP 404 (Not Found).
-        if (!ArticleServices.existsById(id)) {
+        if (!articleServices.existsById(id)) {
             return new ResponseEntity<Article>(entity, HttpStatus.NOT_FOUND);
         }
         // Altrimenti, aggiorna l'articolo e restituisci l'articolo aggiornato con uno stato HTTP 200 (OK).
-        ArticleServices.updateArticle(entity);
+        articleServices.updateArticle(entity);
         return new ResponseEntity<Article>(entity, HttpStatus.OK);
     }
+
     }

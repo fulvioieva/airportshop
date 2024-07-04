@@ -28,29 +28,6 @@ public class User implements Serializable{
 	
 	@Column(name = "password")
 	private String password;
-	
-	@Override
-	public String toString() {
-		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", password=" + password + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(idUser, name, password, surname);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		return idUser == other.idUser && Objects.equals(name, other.name) && Objects.equals(password, other.password)
-				&& Objects.equals(surname, other.surname);
-	}
 
 	public int getIdUser() {
 		return idUser;
@@ -82,6 +59,29 @@ public class User implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", password=" + password + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idUser, name, password, surname);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return idUser == other.idUser && Objects.equals(name, other.name) && Objects.equals(password, other.password)
+				&& Objects.equals(surname, other.surname);
 	}
 }
 

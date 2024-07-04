@@ -68,4 +68,14 @@ public class ArticleOrder {
     public int hashCode() {
         return Objects.hash(id, article, order, qtyOrdered);
     }
+
+    @Override
+    public String toString() {
+        return "ArticleOrder{" +
+                "id=" + id +
+                ", article=" + article +
+                ", order=" + order +
+                ", qtyOrdered=" + qtyOrdered +
+                '}';
+    }
 }

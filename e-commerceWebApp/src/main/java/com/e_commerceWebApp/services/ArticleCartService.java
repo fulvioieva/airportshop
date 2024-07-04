@@ -4,8 +4,6 @@ import com.e_commerceWebApp.entity.Article;
 import com.e_commerceWebApp.entity.ArticleCart;
 import com.e_commerceWebApp.entity.ArticleCartId;
 import com.e_commerceWebApp.repository.ArticleCartRepository;
-import com.e_commerceWebApp.repository.ArticleRepository;
-import com.e_commerceWebApp.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +13,15 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleCartService implements IArticleCartService{
 
-    @Autowired
-    ArticleRepository artRepo;
 
     @Autowired
-    CartRepository cartRepo;
+    private ArticleCartRepository aCRepo;
 
     @Autowired
-    ArticleCartRepository aCRepo;
+    private ArticleService aS;
 
     @Autowired
-    ArticleService aS;
-
-    @Autowired
-    CartService cS;
+    private CartService cS;
 
 
 

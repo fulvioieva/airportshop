@@ -5,6 +5,7 @@ import com.e_commerceWebApp.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.List;
 
 @Service
@@ -35,7 +36,12 @@ public class ArticleService implements IArticleService{
 
     @Override
     public Article getArticleById(String articleId) {
-        return articleRepo.findById(articleId).orElse(new Article());
+        if (articleRepo.existsById(articleId)) {
+            System.out.println(articleRepo.findById(articleId).toString());
+            System.out.println(articleRepo.findById(articleId).get().toString());
+            return articleRepo.findById(articleId).get();
+        }
+        return new Article();
     }
 
     @Override

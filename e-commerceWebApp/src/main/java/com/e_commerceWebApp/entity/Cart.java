@@ -1,16 +1,11 @@
 package com.e_commerceWebApp.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "carts")
@@ -30,6 +25,15 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private User user;
+
+	@ManyToMany
+	@JoinTable(
+			name = "articleCart",
+			joinColumns = @JoinColumn(name = "cart_id"),
+			inverseJoinColumns = @JoinColumn(name = "article_id")
+	)
+	private List<Article> articles = new ArrayList<>();
+
 
 	public Integer getId() {
 		return id;
@@ -63,16 +67,35 @@ public class Cart {
 		this.user = user;
 	}
 
+	public List<Article> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(List<Article> articles) {
+		this.articles = articles;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Cart cart = (Cart) o;
-		return Objects.equals(id, cart.id) && Objects.equals(userId, cart.userId) && Objects.equals(totalPrice, cart.totalPrice) && Objects.equals(user, cart.user);
+		return Objects.equals(id, cart.id) && Objects.equals(userId, cart.userId) && Objects.equals(totalPrice, cart.totalPrice) && Objects.equals(user, cart.user) && Objects.equals(articles, cart.articles);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, userId, totalPrice, user);
+		return Objects.hash(id, userId, totalPrice, user, articles);
+	}
+
+	@Override
+	public String toString() {
+		return "Cart{" +
+				"id=" + id +
+				", userId=" + userId +
+				", totalPrice=" + totalPrice +
+				", user=" + user +
+				", articles=" + articles +
+				'}';
 	}
 }

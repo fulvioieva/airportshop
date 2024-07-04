@@ -20,7 +20,7 @@ public class CartService implements ICartService{
 
     @Override
     public Cart getCartById(Integer id) {
-        return cartRepo.findById(String.valueOf(id)).orElse(null);
+        return cartRepo.findById(id).orElse(null);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class CartService implements ICartService{
 
     @Override
     public int deleteCart(Integer id) {
-        if(cartRepo.existsById(String.valueOf(id))){
-            cartRepo.deleteById(String.valueOf(id));
+        if(cartRepo.existsById(id)){
+            cartRepo.deleteById(id);
             return 1;
         }
         return 0;
@@ -39,7 +39,7 @@ public class CartService implements ICartService{
 
     @Override
     public int updateCart(Cart cart) {
-        if (cartRepo.existsById(String.valueOf(cart.getId()))) {
+        if (cartRepo.existsById(cart.getId())) {
             cartRepo.save(cart);
             return 1;
         }
@@ -48,6 +48,6 @@ public class CartService implements ICartService{
 
     @Override
     public boolean existsById(Integer cartId) {
-        return cartRepo.existsById(String.valueOf(cartId));
+        return cartRepo.existsById(cartId);
     }
 }

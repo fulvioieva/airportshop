@@ -47,4 +47,12 @@ public class ArticleOrderId implements Serializable {
     public int hashCode() {
         return Objects.hash(articleId, orderId);
     }
+
+    @Override
+    public String toString() {
+        return "ArticleOrderId{" +
+                "articleId='" + articleId + '\'' +
+                ", orderId=" + orderId +
+                '}';
+    }
 }

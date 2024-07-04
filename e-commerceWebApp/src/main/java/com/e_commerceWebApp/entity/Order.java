@@ -1,19 +1,12 @@
 package com.e_commerceWebApp.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.e_commerceWebApp.enums.TypePayment;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "orders")
@@ -39,6 +32,14 @@ public class Order {
 
 	@Column(name = "totalPrice", nullable = false)
 	private BigDecimal totalPrice;
+
+	@ManyToMany
+	@JoinTable(
+			name = "articleOrder",
+			joinColumns = @JoinColumn(name = "order_id"),
+			inverseJoinColumns = @JoinColumn(name = "article_id")
+	)
+	private List<Article> articles = new ArrayList<>();
 
     public enum State {
         ACTIVE, CLOSED
@@ -95,5 +96,17 @@ public class Order {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, user, typePayment, state, totalPrice);
+	}
+
+	@Override
+	public String toString() {
+		return "Order{" +
+				"id=" + id +
+				", user=" + user +
+				", typePayment=" + typePayment +
+				", state=" + state +
+				", totalPrice=" + totalPrice +
+				", articles=" + articles +
+				'}';
 	}
 }

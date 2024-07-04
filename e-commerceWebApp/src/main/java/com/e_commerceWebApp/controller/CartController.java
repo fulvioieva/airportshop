@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -51,42 +52,76 @@ public class CartController {
         return new ResponseEntity<Cart>(cart, HttpStatus.OK);
     }
 
-    public boolean addArticle(String articleId, int cartId, int qtyOrdered) {
+    @PostMapping(value = "/addArticle{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+
+
+    public boolean addArticleIntoCart( @PathVariable("id") String articleId,
+                                       @RequestParam("userId") int userId,
+                                        @RequestParam("qtyOrdered") int qtyOrdered)  {
+        System.out.println(articleId + " "+ userId + " "+ qtyOrdered);
         // Verifica l'esistenza dell'articolo
         if (!aS.existsById(articleId)) {
+            System.out.println("non trovo l'articolo");
             return false;
         }
-        // Verifica l'esistenza del carrello
-        if (!cS.existsById(cartId)) {
-            return false;
-        }
-        // Ottieni l'articolo e il carrello
+        // Ottieni l'articolo
         Article article = aS.getArticleById(articleId);
-        Cart cart = cS.getCartById(cartId);
+        System.out.println(article.toString() + "ARTICOLO RECUPERATO");
         // Verifica se la quantità ordinata è disponibile
         if (article.getQtyAvailable() < qtyOrdered) {
+
+            System.out.println("non abbastanza articoli, solo " + article.getQtyAvailable() + "articoli trovati");
             return false;
+
+        }
+        // Cerca un carrello esistente per l'utente
+        System.out.println("verifico l'esistenza del cart");
+
+        Cart cart = cS.getCartById(userId);
+        System.out.println("recupero il cart :" + cart);
+
+        // Se non esiste un carrello, creane uno nuovo
+        if (cart == null) {
+            System.out.println("creo un carrello");
+
+            cart = new Cart();
+            cart.setId(userId);
+            cart.setUserId(userId);
+            cart.setTotalPrice(BigDecimal.ZERO);
+            cS.saveCart(cart);
+
         }
         // Crea i nuovi oggetti
+
         ArticleCartId newIdCart = new ArticleCartId();
         ArticleCart newItem = new ArticleCart();
         // Imposta i nuovi oggetti
+
         newIdCart.setArticleId(articleId);
-        newIdCart.setCartId(cartId);
+        newIdCart.setCartId(userId);
         newItem.setQtyOrdered(qtyOrdered);
 
         // Aggiorna la quantità disponibile dell'articolo
-        int qtyAvail = article.getQtyAvailable();
-        article.setQtyAvailable(qtyAvail - qtyOrdered);
+        //int qtyAvail = article.getQtyAvailable();
+        //article.setQtyAvailable(qtyAvail - qtyOrdered);
 
         // Aggiorna il prezzo totale del carrello
         BigDecimal price = cart.getTotalPrice();
         BigDecimal unitPrice = article.getPrice();
         BigDecimal qty = BigDecimal.valueOf(qtyOrdered);
+
+
         cart.setTotalPrice(price.add(unitPrice.multiply(qty)));
+
+        System.out.println(newItem.toString());
+
         // Salva i nuovi oggetti
         aCS.save(newItem);
+        System.out.println("QUI 10");
+
         aS.saveArticle(article);
+        System.out.println("QUI 11");
+
         cS.saveCart(cart);
         return true;
     }

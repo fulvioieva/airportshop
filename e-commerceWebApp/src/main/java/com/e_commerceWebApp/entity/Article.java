@@ -2,12 +2,11 @@ package com.e_commerceWebApp.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="articles")
@@ -32,7 +31,23 @@ public class Article implements Serializable {
 	
 	@Column(name="qtyAvailable")
 	private int qtyAvailable;
-	
+
+	@ManyToMany
+	@JoinTable(
+			name = "articleCart",
+			joinColumns = @JoinColumn(name = "article_id"),
+			inverseJoinColumns = @JoinColumn(name = "cart_id")
+	)
+	private List<Cart> carts = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(
+			name = "articleOrder",
+			joinColumns = @JoinColumn(name = "article_id"),
+			inverseJoinColumns = @JoinColumn(name = "order_id")
+	)
+	private List<Order> orders = new ArrayList<>();
+
 	@Override
 	public String toString() {
 		return "Article [idArticle=" + idArticle + ", name=" + name + ", description=" + description + ", price="
