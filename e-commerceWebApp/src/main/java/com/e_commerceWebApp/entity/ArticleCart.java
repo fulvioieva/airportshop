@@ -24,6 +24,15 @@ public class ArticleCart {
 	@Column(name = "qty_ordered", nullable = false)
 	private Integer qtyOrdered;
 
+
+	public Integer getQtyOrdered() {
+		return qtyOrdered;
+	}
+
+	public void setQtyOrdered(Integer qtyOrdered) {
+		this.qtyOrdered = qtyOrdered;
+	}
+
 	public Article getArticle() {
 		return article;
 	}
@@ -40,37 +49,24 @@ public class ArticleCart {
 		this.cart = cart;
 	}
 
-	public Integer getQtyOrdered() {
-		return qtyOrdered;
+	public ArticleCartId getId() {
+		return id;
 	}
 
-	public void setQtyOrdered(Integer qtyOrdered) {
-		this.qtyOrdered = qtyOrdered;
+	public void setId(ArticleCartId id) {
+		this.id = id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ArticleCart that = (ArticleCart) o;
+		return Objects.equals(id, that.id) && Objects.equals(article, that.article) && Objects.equals(cart, that.cart) && Objects.equals(qtyOrdered, that.qtyOrdered);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(article, cart, qtyOrdered);
+		return Objects.hash(id, article, cart, qtyOrdered);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ArticleCart other = (ArticleCart) obj;
-		return Objects.equals(article, other.article) && Objects.equals(cart, other.cart)
-				&& Objects.equals(qtyOrdered, other.qtyOrdered);
-	}
-
-	@Override
-	public String toString() {
-		return "ArticleCart [article=" + article + ", cart=" + cart + ", qtyOrdered=" + qtyOrdered + "]";
-	}
-
-
-
 }

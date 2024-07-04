@@ -12,4 +12,6 @@ public interface IArticleService {
     int updateArticle(Article article);
 
     Article getArticleById(String articleId);
+
+    boolean saveArticle(Article article);
 }

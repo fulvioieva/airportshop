@@ -1,5 +1,6 @@
 package com.e_commerceWebApp.entity;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.e_commerceWebApp.enums.TypePayment;
@@ -23,104 +24,76 @@ public class Order {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
-    private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
     private User user;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_type", nullable = false)
+    @Column(name = "paymentType", nullable = false)
     private TypePayment  typePayment ;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
     private State state;
 
+	@Column(name = "totalPrice", nullable = false)
+	private BigDecimal totalPrice;
 
     public enum State {
         ACTIVE, CLOSED
     }
 
-
 	public Integer getId() {
 		return id;
 	}
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-	public Cart getCart() {
-		return cart;
-	}
-
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-
 	public User getUser() {
 		return user;
 	}
-
 
 	public void setUser(User user) {
 		this.user = user;
 	}
 
-
 	public TypePayment getTypePayment() {
 		return typePayment;
 	}
-
 
 	public void setTypePayment(TypePayment typePayment) {
 		this.typePayment = typePayment;
 	}
 
-
 	public State getState() {
 		return state;
 	}
-
 
 	public void setState(State state) {
 		this.state = state;
 	}
 
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Order order = (Order) o;
+		return Objects.equals(id, order.id) && Objects.equals(user, order.user) && typePayment == order.typePayment && state == order.state && Objects.equals(totalPrice, order.totalPrice);
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cart, id, state, typePayment, user);
+		return Objects.hash(id, user, typePayment, state, totalPrice);
 	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Order other = (Order) obj;
-		return Objects.equals(cart, other.cart) && Objects.equals(id, other.id) && state == other.state
-				&& typePayment == other.typePayment && Objects.equals(user, other.user);
-	}
-
-
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", cart=" + cart + ", user=" + user + ", typePayment=" + typePayment + ", state="
-				+ state + "]";
-	}
-
-	
-    
-    
 }

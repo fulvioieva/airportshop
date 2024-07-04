@@ -1,5 +1,6 @@
 package com.e_commerceWebApp.entity;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -20,14 +21,14 @@ public class Cart {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "userId", nullable = false)
     private Integer userId;
 
-    @Column(name = "total_price", nullable = false)
-    private Integer totalPrice;
+    @Column(name = "totalPrice", nullable = false)
+    private BigDecimal totalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
     private User user;
 
 	public Integer getId() {
@@ -46,11 +47,11 @@ public class Cart {
 		this.userId = userId;
 	}
 
-	public Integer getTotalPrice() {
+	public BigDecimal getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(Integer totalPrice) {
+	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
@@ -63,27 +64,15 @@ public class Cart {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Cart cart = (Cart) o;
+		return Objects.equals(id, cart.id) && Objects.equals(userId, cart.userId) && Objects.equals(totalPrice, cart.totalPrice) && Objects.equals(user, cart.user);
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(id, totalPrice, user, userId);
+		return Objects.hash(id, userId, totalPrice, user);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cart other = (Cart) obj;
-		return Objects.equals(id, other.id) && Objects.equals(totalPrice, other.totalPrice)
-				&& Objects.equals(user, other.user) && Objects.equals(userId, other.userId);
-	}
-
-	@Override
-	public String toString() {
-		return "Cart [id=" + id + ", userId=" + userId + ", totalPrice=" + totalPrice + ", user=" + user + "]";
-	}
-
-
 }

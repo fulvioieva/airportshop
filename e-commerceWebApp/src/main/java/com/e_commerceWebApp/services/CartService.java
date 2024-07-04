@@ -1,7 +1,7 @@
 package com.e_commerceWebApp.services;
 
 import com.e_commerceWebApp.entity.Cart;
-import com.e_commerceWebApp.repository.Cartrepository;
+import com.e_commerceWebApp.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,11 @@ import java.util.List;
 @Service
 public class CartService implements ICartService{
     @Autowired
-    Cartrepository cartRepo;
+    CartRepository cartRepo;
 
     @Override
     public List<Cart> getAllCarts() {
+
         return cartRepo.findAll();
     }
 
@@ -36,7 +37,6 @@ public class CartService implements ICartService{
         return 0;
     }
 
-
     @Override
     public int updateCart(Cart cart) {
         if (cartRepo.existsById(String.valueOf(cart.getId()))) {
@@ -44,5 +44,10 @@ public class CartService implements ICartService{
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public boolean existsById(Integer cartId) {
+        return cartRepo.existsById(String.valueOf(cartId));
     }
 }

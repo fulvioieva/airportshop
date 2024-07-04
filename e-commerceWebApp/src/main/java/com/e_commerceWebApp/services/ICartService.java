@@ -15,4 +15,6 @@ public interface ICartService {
     public int deleteCart(Integer id);
 
     int updateCart(Cart cart);
+
+    boolean existsById(Integer cartId);
 }
