@@ -12,7 +12,7 @@ public interface ICartService {
 
     public Cart saveCart(Cart cart);
 
-    public int deleteCart(Integer id);
+    public boolean deleteCart(Cart cart);
 
     int updateCart(Cart cart);
 

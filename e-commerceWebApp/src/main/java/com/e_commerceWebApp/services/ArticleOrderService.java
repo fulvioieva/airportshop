@@ -21,6 +21,9 @@ public class ArticleOrderService implements IArticleOrderService{
     @Autowired
     private CartService cS;
 
+    @Autowired
+    private OrderService oS;
+
 
     @Override
     public boolean addArticle(String articleId, int orderId, int qtaOrdered) {
@@ -98,7 +101,11 @@ public class ArticleOrderService implements IArticleOrderService{
 
     @Override
     public List<Article> getAllArticles() {
-        return List.of();
+        // Ottiene tutti gli articoli da tutti gli ArticleCart nel repository
+        List<Article> articleList = aOR.findAll().stream()
+                .map(ArticleOrder::getArticle)
+                .collect(Collectors.toList());
+        return articleList;
     }
 
     @Override
@@ -118,11 +125,26 @@ public class ArticleOrderService implements IArticleOrderService{
     }
 
     @Override
+    public List<String> getAllArticleIdFromOrder(int orderId) {
+    return aOR.findByOrderId(orderId).stream()
+            .map(ArticleOrder::getArticle).collect(Collectors.toList()).stream()
+            .map(Article::getIdArticle).collect(Collectors.toList());
+    }
+
+    @Override
     public boolean save(ArticleOrder articleOrder) {
-        if (articleOrder != null&&aOR.existsById(articleOrder.getId())) {
+        if (articleOrder != null&&oS.existsById(articleOrder.getId().getOrderId())) {
             aOR.save(articleOrder);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public ArticleOrder findById(ArticleOrderId articleorderId) {
+        if (aOR.existsById(articleorderId)){
+        return aOR.findById(articleorderId).get();
+        }
+        return null;
     }
 }

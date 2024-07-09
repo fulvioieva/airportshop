@@ -2,7 +2,10 @@ package com.e_commerceWebApp.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+
 
 @Entity
 @Table(name = "articleCart"/*, schema = "ecommerce_on_db"*/)
@@ -14,15 +17,27 @@ public class ArticleCart {
 	@MapsId("articleId")
 	@ManyToOne
 	@JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false)
+	@JsonIgnore
 	private Article article;
 
 	@MapsId("cartId")
 	@ManyToOne
+	//(cascade= {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
+
 	private Cart cart;
 
 	@Column(name = "qty_ordered", nullable = false)
 	private Integer qtyOrdered;
+
+	/*@JsonIgnore
+	private Cart cart;
+
+	@JsonIgnore
+	private User user;
+
+	@JsonIgnore
+	private List<Article> articles;*/
 
 	public Integer getQtyOrdered() {
 		return qtyOrdered;

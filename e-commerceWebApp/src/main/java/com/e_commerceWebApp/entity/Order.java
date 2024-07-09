@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.e_commerceWebApp.enums.TypePayment;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +21,7 @@ public class Order {
 
 
     @ManyToOne
+	@JsonIgnore
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
     private User user;
 
@@ -39,6 +42,7 @@ public class Order {
 			joinColumns = @JoinColumn(name = "order_id"),
 			inverseJoinColumns = @JoinColumn(name = "article_id")
 	)
+	@JsonBackReference
 	private List<Article> articles = new ArrayList<>();
 
     public enum State {

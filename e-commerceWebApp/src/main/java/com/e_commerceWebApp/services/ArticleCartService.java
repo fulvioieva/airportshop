@@ -3,6 +3,7 @@ package com.e_commerceWebApp.services;
 import com.e_commerceWebApp.entity.Article;
 import com.e_commerceWebApp.entity.ArticleCart;
 import com.e_commerceWebApp.entity.ArticleCartId;
+import com.e_commerceWebApp.entity.ArticleOrder;
 import com.e_commerceWebApp.repository.ArticleCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,12 +120,33 @@ public class ArticleCartService implements IArticleCartService{
     }
 
     @Override
+    public ArticleCart findById(ArticleCartId id) {
+         return aCRepo.findById(id).get();
+    }
+
+    @Override
     public boolean save(ArticleCart articleCart) {
-        if (articleCart != null&&aCRepo.existsById(articleCart.getId())) {
+        if (articleCart != null) {
+            System.out.println(articleCart.getId());
+            //System.out.println(articleCart.getId());
+
             aCRepo.save(articleCart);
             return true;
         }
+        System.out.println(aCRepo.existsById(articleCart.getId()));
+        System.out.println(articleCart);
         return false;
     }
+
+    @Override
+    public boolean exists(ArticleCartId artCartId) {
+        return aCRepo.existsById(artCartId);
+    }
+
+    @Override
+    public List<ArticleCart> getAllArticleCartfromCart(int userId) {
+        return aCRepo.findByCartId(userId);
+    }
+
 
 }

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +14,6 @@ import jakarta.persistence.*;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -23,6 +24,7 @@ public class Cart {
     private BigDecimal totalPrice;
 
     @ManyToOne
+	@JsonIgnore
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private User user;
 
@@ -32,6 +34,7 @@ public class Cart {
 			joinColumns = @JoinColumn(name = "cart_id"),
 			inverseJoinColumns = @JoinColumn(name = "article_id")
 	)
+	@JsonBackReference
 	private List<Article> articles = new ArrayList<>();
 
 

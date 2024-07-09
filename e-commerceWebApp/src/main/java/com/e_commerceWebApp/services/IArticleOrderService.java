@@ -2,6 +2,7 @@ package com.e_commerceWebApp.services;
 
 import com.e_commerceWebApp.entity.Article;
 import com.e_commerceWebApp.entity.ArticleOrder;
+import com.e_commerceWebApp.entity.ArticleOrderId;
 
 
 import java.util.List;
@@ -17,5 +18,9 @@ public interface IArticleOrderService {
     List<Article> getAllArticleFromOrder(int idOrder);
     List<Article> getAllArticleFromOrderById(String articleId);
 
+    List<String> getAllArticleIdFromOrder(int orderId);
+
     boolean save(ArticleOrder articleOrder);
+
+    ArticleOrder findById(ArticleOrderId articleorderId);
 }

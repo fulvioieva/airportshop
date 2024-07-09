@@ -29,12 +29,18 @@ public class CartService implements ICartService{
     }
 
     @Override
-    public int deleteCart(Integer id) {
-        if(cartRepo.existsById(id)){
-            cartRepo.deleteById(id);
-            return 1;
+    public boolean deleteCart(Cart cart) {
+        try {
+            int id= cart.getId();
+            if(cartRepo.existsById(id)){
+                cartRepo.delete(cart);
+                return true;
+            }
+        } catch (Exception e) {
+            // Stampa l'eccezione per il debug
+            e.printStackTrace();
         }
-        return 0;
+        return false;
     }
 
     @Override
